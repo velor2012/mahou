@@ -1,0 +1,5 @@
+node_modules
+.swc
+.mfsu
+/dist
+/src/pages/DayNews/mock
