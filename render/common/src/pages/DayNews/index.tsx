@@ -322,7 +322,7 @@ function getFishCalendar(ins: Dayjs) {
   const labelMap: Record<keyof IFishCalendar, string> = {
     toWeekendsDay: '周末',
     toMidAutumnDay: '中秋节',
-    toNationalDay: '中秋节',
+    toNationalDay: '国庆节',
     toNewYearDay: '元旦',
     toSpringDay: '春节',
     toTombSweepingDay: '清明节',
