@@ -79,6 +79,7 @@ export const Mahou = () => {
           .replace('{{bodyHeight}}', `2180`)
           .replace('{{bodyWidth}}', `780`),
         output: outputPath,
+        timeout: 60 * 1e3,
         puppeteerArgs: {
           args: ['--no-sandbox', '--disable-setuid-sandbox'],
           defaultViewport: {
