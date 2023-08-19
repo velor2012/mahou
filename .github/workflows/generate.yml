@@ -16,6 +16,15 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Remove not need dep
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs')
+            const mahiroPkg = JSON.parse(fs.readFileSync('./mahiro/package.json', 'utf8'))
+            delete mahiroPkg.devDependencies.mahiro
+            fs.writeFileSync('./mahiro/package.json', JSON.stringify(mahiroPkg, null, 2))
+
       - uses: pnpm/action-setup@v2
         name: Install pnpm
         with:
@@ -34,7 +43,15 @@ jobs:
         run: pnpm sync:bgm
         working-directory: ./mahiro
 
+      - name: Cache HTML
+        id: cache-html
+        uses: actions/cache@v3
+        with:
+          path: render/common/dist/index.html
+          key: ${{ runner.os }}-html-${{ hashFiles('**/pnpm-lock.yaml') }}
+
       - name: Prepare HTML
+        if: steps.cache-html.outputs.cache-hit != 'true'
         run: pnpm build
         working-directory: ./render/common
 
@@ -61,3 +78,11 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: output
           publish_dir: ./output
+
+      - name: Upload Artifact
+        if: steps.check_files.outputs.files_exists == 'true'
+        uses: actions/upload-artifact@v3
+        with:
+          name: output
+          path: ./output/output.png
+          retention-days: 1
