@@ -11,6 +11,7 @@
 <img src="https://cdn.jsdelivr.net/gh/fz6m/Private-picgo@moe-2021/img/20230803141641.webp" width="40%" />
 </details>
 
+通过 CDN 立即使用：[jsdelivr(含缓存)](https://cdn.jsdelivr.net/gh/opq-osc/mahou@output/output.png) | [GitHub Raw](https://github.com/opq-osc/mahou/blob/output/output.png)
 
 ### License
 
