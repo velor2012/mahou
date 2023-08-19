@@ -76,6 +76,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: output
           publish_dir: ./output
+          force_orphan: true
 
       - name: Upload Artifact
         if: steps.check_files.outputs.files_exists == 'true'
