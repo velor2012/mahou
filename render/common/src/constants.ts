@@ -12,6 +12,6 @@ export interface ITemplateInfo {
 
 export const TEMPLATE_INFO: Record<ETemplate, ITemplateInfo> = {
   [ETemplate.dayNews]: {
-    size: [780, 2180],
+    size: [780, 2210],
   },
 }

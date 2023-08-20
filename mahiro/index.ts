@@ -62,6 +62,8 @@ export const Mahou = () => {
 
       logger.info(`${pluginName}: render for ${day}`)
 
+      const height = 2210
+      const width = 780
       const buffer = await nodeHtmlToImage({
         html: readFileSync(htmlPath, 'utf-8')
           .replace('{{renderTemplate}}', JSON.stringify('dayNews'))
@@ -76,15 +78,15 @@ export const Mahou = () => {
               hitokoto: remoteData.hitokoto,
             })
           )
-          .replace('{{bodyHeight}}', `2180`)
-          .replace('{{bodyWidth}}', `780`),
+          .replace('{{bodyHeight}}', `${height}`)
+          .replace('{{bodyWidth}}', `${width}`),
         output: outputPath,
         timeout: 60 * 1e3,
         puppeteerArgs: {
           args: ['--no-sandbox', '--disable-setuid-sandbox'],
           defaultViewport: {
-            width: 780,
-            height: 2180,
+            width,
+            height,
             deviceScaleFactor: 2,
           },
         },
