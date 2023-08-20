@@ -132,7 +132,6 @@ export const DayNews = () => {
         <div className={styles.t}>
           <Block text="游戏资讯" icon={gameIcon} content={gameContent} />
         </div>
-        {/* TODO: resize body height and check hitokoto styles with 2 lines */}
         <div className={styles.four}>
           <Block
             text="今日一言"
