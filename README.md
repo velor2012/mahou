@@ -7,8 +7,8 @@
 #### [`真寻日报`](./render/common/)
 
 <details>
-<summary>查看预览图</summary>
-<img src="https://cdn.jsdelivr.net/gh/fz6m/Private-picgo@moe-2021/img/20230803141641.webp" width="40%" />
+<summary>查看实时预览图</summary>
+<img src="https://mahou.spiritx.xyz/output.png" width="40%" />
 </details>
 
 通过 CDN 立即使用：
