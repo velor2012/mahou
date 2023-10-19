@@ -9,7 +9,6 @@ import {
   IFishCalendar,
   dayNewsDataFallback,
 } from './interface'
-import dayjs, { type Dayjs } from 'dayjs'
 import calendar from '@/utils/js-calendar-converter'
 import fishIcon from './assets/icons/fish.png'
 import bilibiliIcon from './assets/icons/bilibili.png'
@@ -25,6 +24,16 @@ import { ensureFreeHdslb } from '@/utils/hdslb'
 import st from '@/utils/chinese_s2t'
 import bottomFallback from './assets/bottom.png'
 import emptyFallback from './assets/2.no-bg.png'
+
+// dayjs
+import dayjs, { type Dayjs } from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+import timezone from 'dayjs/plugin/timezone'
+
+dayjs.extend(utc)
+dayjs.extend(timezone)
+
+const cnTimezone = 'Asia/Shanghai'
 
 // mock
 // import biliData from './mock/hotTopic.json'
@@ -42,7 +51,7 @@ export const DayNews = () => {
   }, [])
 
   const timestamp = data.timestamp || dayNewsDataFallback.timestamp!
-  const dayIns = dayjs(timestamp)
+  const dayIns = dayjs(timestamp, cnTimezone)
   const week = getWeekDay(dayIns)
   const dayLabel = getDayLabel(dayIns)
   const lunarLabel = getLunarLabel(dayIns)
@@ -253,7 +262,7 @@ function getFishCalendar(ins: Dayjs) {
     if (!currentDay?.length) {
       return -1
     }
-    const currentDayIns = dayjs(currentDay)
+    const currentDayIns = dayjs(currentDay, cnTimezone)
     const diff = currentDayIns.diff(ins, 'day')
     if (diff >= 0) {
       return diff
@@ -263,18 +272,18 @@ function getFishCalendar(ins: Dayjs) {
     if (!nextDay?.length) {
       return -1
     }
-    const nextDayIns = dayjs(nextDay)
+    const nextDayIns = dayjs(nextDay, cnTimezone)
     return nextDayIns.diff(ins, 'day')
   }
   const getUntilNextSolarDay = (solarDay: [number, number]) => {
     const year = ins.year()
     const solarDayLabel = `${solarDay[0]}-${solarDay[1]}`
-    const currentDayIns = dayjs(`${year}-${solarDayLabel}`)
+    const currentDayIns = dayjs(`${year}-${solarDayLabel}`, cnTimezone)
     const diff = currentDayIns.diff(ins, 'day')
     if (diff >= 0) {
       return diff
     }
-    const nextDayIns = dayjs(`${year + 1}-${solarDayLabel}`)
+    const nextDayIns = dayjs(`${year + 1}-${solarDayLabel}`, cnTimezone)
     return nextDayIns.diff(ins, 'day')
   }
   const getUntilNextMidAutumn = () => {

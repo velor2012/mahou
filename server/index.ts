@@ -1,10 +1,19 @@
 import express from 'express'
 import { existsSync, readFileSync, statSync, writeFileSync } from 'fs'
 import { join } from 'path'
-import dayjs from 'dayjs'
 import { getAllData } from './data'
 import nodeHtmlToImage from 'node-html-to-image'
 import { pngQuantize } from '@napi-rs/image'
+
+// dayjs
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+import timezone from 'dayjs/plugin/timezone'
+
+dayjs.extend(utc)
+dayjs.extend(timezone)
+
+const cnTimezone = 'Asia/Shanghai'
 
 const htmlPath = join(__dirname, './index.html')
 const outputPath = join(__dirname, './output.png')
@@ -41,8 +50,8 @@ const run = async () => {
     // if create time is today, use cache
     if (existsSync(outputPath)) {
       const stats = statSync(outputPath)
-      const latestUpdateTimeIns = dayjs(stats.mtimeMs)
-      const currentIns = dayjs()
+      const latestUpdateTimeIns = dayjs(stats.mtimeMs, cnTimezone)
+      const currentIns = dayjs().tz(cnTimezone)
       // 60 minutes
       if (currentIns.diff(latestUpdateTimeIns, 'minute') < 60) {
         console.log(`${pluginName}: use output cache for ${day}`)
@@ -69,7 +78,7 @@ const run = async () => {
         .replace(
           '{{renderData}}',
           JSON.stringify({
-            timestamp: dayjs().valueOf(),
+            timestamp: dayjs().tz(cnTimezone).valueOf(),
             bilibiliHotTopic: remoteData.bili,
             currentDayNewBangumi: bangumi[day],
             techNews: remoteData.tech,
@@ -100,7 +109,7 @@ const run = async () => {
   }
 
   const getDayMark = () => {
-    return dayjs().format('ddd').toLowerCase()
+    return dayjs().tz(cnTimezone).format('ddd').toLowerCase()
   }
   const useGenerate = process.argv.includes('--generate')
   if (useGenerate){
