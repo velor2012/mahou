@@ -16,7 +16,6 @@ jobs:
       - name: Set TZ
         run: |
           timedatectl
-          echo 'New TZ: $TZ'
           sudo timedatectl set-timezone $TZ
           timedatectl
           ls -l /etc/localtime
