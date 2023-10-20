@@ -7,16 +7,7 @@ import {
   writeFileSync,
 } from 'fs'
 import { join } from 'path'
-
-// dayjs
 import dayjs from 'dayjs'
-import utc from 'dayjs/plugin/utc'
-import timezone from 'dayjs/plugin/timezone'
-
-dayjs.extend(utc)
-dayjs.extend(timezone)
-
-const cnTimezone = 'Asia/Shanghai'
 
 const ensureCacheDir = () => {
   const cacheDir = join(__dirname, './cache')
@@ -35,7 +26,7 @@ export const getTechData = async () => {
     const latestUpdateTime = statSync(cacheFile).mtimeMs
     // 60 Minutes
     const validTimeGap = 60 * 60 * 1000
-    const currentTime = dayjs().tz(cnTimezone).valueOf()
+    const currentTime = dayjs().valueOf()
     if (currentTime - latestUpdateTime < validTimeGap) {
       console.log(`mahou: use tech cache`)
       text = readFileSync(cacheFile, 'utf-8')
@@ -61,8 +52,8 @@ export const getGameData = async () => {
   if (existsSync(cacheFile)) {
     // check cache valid
     const latestUpdateTime = statSync(cacheFile).mtimeMs
-    const latestUpdateIns = dayjs(latestUpdateTime, cnTimezone)
-    const currentIns = dayjs().tz(cnTimezone)
+    const latestUpdateIns = dayjs(latestUpdateTime)
+    const currentIns = dayjs()
     // same day
     const dayGap = currentIns.diff(latestUpdateIns, 'day')
     if (dayGap < 1) {
@@ -92,7 +83,7 @@ export const getBiliData = async () => {
     const latestUpdateTime = statSync(cacheFile).mtimeMs
     // 60 Minutes
     const validTimeGap = 60 * 60 * 1000
-    const currentTime = dayjs().tz(cnTimezone).valueOf()
+    const currentTime = dayjs().valueOf()
     if (currentTime - latestUpdateTime < validTimeGap) {
       console.log(`mahou: use bili cache`)
       text = readFileSync(cacheFile, 'utf-8')
@@ -125,7 +116,7 @@ export const getHitokotoData = async () => {
     const latestUpdateTime = statSync(cacheFile).mtimeMs
     // 12 hours
     const validTimeGap = 12 * 60 * 60 * 1000
-    const currentTime = dayjs().tz(cnTimezone).valueOf()
+    const currentTime = dayjs().valueOf()
     if (currentTime - latestUpdateTime < validTimeGap) {
       console.log(`mahou: use hitokoto cache`)
       text = readFileSync(cacheFile, 'utf-8')

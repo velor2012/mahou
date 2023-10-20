@@ -4,15 +4,6 @@ import nodeHtmlToImage from 'node-html-to-image'
 import { existsSync, readFileSync, statSync } from 'fs'
 import { getAllData } from './data'
 
-import dayjs from 'dayjs'
-import utc from 'dayjs/plugin/utc'
-import timezone from 'dayjs/plugin/timezone'
-
-dayjs.extend(utc)
-dayjs.extend(timezone)
-
-const cnTimezone = 'Asia/Shanghai'
-
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 const avaliableGroups = new Set<number>()
 
@@ -51,12 +42,13 @@ export const Mahou = () => {
     const logger = mahiro.logger.withTag(pluginName) as typeof mahiro.logger
     logger.info(`load ${pluginName} plugin ...`)
 
+    const dayjs = mahiro.utils.dayjs
     const render = async (day: string) => {
       // if create time is today, use cache
       if (existsSync(outputPath)) {
         const stats = statSync(outputPath)
-        const latestUpdateTimeIns = dayjs(stats.mtimeMs, cnTimezone)
-        const currentIns = dayjs().tz(cnTimezone)
+        const latestUpdateTimeIns = dayjs(stats.mtimeMs)
+        const currentIns = dayjs()
         // 60 minutes
         if (currentIns.diff(latestUpdateTimeIns, 'minute') < 60) {
           logger.info(`${pluginName}: use output cache for ${day}`)
@@ -78,7 +70,7 @@ export const Mahou = () => {
           .replace(
             '{{renderData}}',
             JSON.stringify({
-              timestamp: dayjs().tz(cnTimezone).valueOf(),
+              timestamp: dayjs().valueOf(),
               bilibiliHotTopic: remoteData.bili,
               currentDayNewBangumi: bangumi[day],
               techNews: remoteData.tech,
@@ -145,7 +137,7 @@ export const Mahou = () => {
       // trigger immediately
       if (msg?.Content === '真寻日报') {
         logger.info(`${pluginName}: trigger for ${groupId}`)
-        const mark = dayjs().tz(cnTimezone).format('ddd').toLowerCase()
+        const mark = dayjs().format('ddd').toLowerCase()
         try {
           task(mark, groupId)
         } catch (e) {
