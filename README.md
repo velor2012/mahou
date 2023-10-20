@@ -1,10 +1,14 @@
 # Mahou
 
-存放各种 mahiro 渲染出图插件。
+<div align="center">
 
-### 目前已有的功能
+### ❗️EOL
 
-#### [`真寻日报`](./render/common/)
+项目可正常运作，但不再提供维护，如有自定义需求可 fork 使用
+
+</div>
+
+真寻日报。
 
 <details>
 <summary>查看实时预览图</summary>
