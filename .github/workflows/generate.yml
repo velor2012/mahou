@@ -5,11 +5,22 @@ on:
     - cron: 0 0/1 * * *
   workflow_dispatch:
 
+env:
+  TZ: Asia/Shanghai
+
 jobs:
   generate:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Set TZ
+        run: |
+          timedatectl
+          echo 'New TZ: $TZ'
+          sudo timedatectl set-timezone $TZ
+          timedatectl
+          ls -l /etc/localtime
+
       - name: Checkout
         uses: actions/checkout@v3
         with:
