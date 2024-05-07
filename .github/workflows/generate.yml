@@ -23,7 +23,6 @@ jobs:
       - name: Install packages
         run: |
           sudo apt update
-          sudo apt install -y libnss
           sudo apt install -y libnss3-dev libgdk-pixbuf2.0-dev libgtk-3-dev libxss-dev
           sudo apt install -y libasound2 fonts-noto-cjk
           sudo fc-cache -f -v
