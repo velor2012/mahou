@@ -6,6 +6,11 @@ import * as puppeteer from 'puppeteer'
 import path from 'path'
 
 const browser = await puppeteer.launch({args: ['--no-sandbox', '--lang=zh-CN,zh'],
+defaultViewport: {
+    width: 780,
+    height: 2210,
+    deviceScaleFactor: 2,
+},
 headless: true})
 
 function delay(time: number) {
@@ -21,19 +26,14 @@ export default async function handler(
   res: NextApiResponse<any>,
 ) {
     const page = await browser.newPage()
-    await page.goto('http://localhost:3000',{waitUntil: 'networkidle0'})
+    await page.goto('http://localhost:3000',{waitUntil: 'networkidle0'},)
     // await page.waitForNavigation()
     await page.content();
-    // await page.evaluate(async() => {
-    //     await new Promise(function(resolve) {
-    //            setTimeout(resolve, 2000)
-    //     });
-    // });
+    const element = await page.$("body");
     //对整个页面截图
-    await page.screenshot({
+    await element!.screenshot({
         path: path.resolve(`./output/output.png`),  //图片保存路径
         type: 'png',
-        fullPage: true //边滚动边截图
     })
     console.log('保存截图')
     await page.close()
