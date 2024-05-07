@@ -12,8 +12,8 @@ export default async function handler(
   res: NextApiResponse<any>,
 ) {
     let t = dayNewsDataFallback
-    if (process.env.NODE_ENV === 'development') {
+    // if (process.env.NODE_ENV === 'development') {
         t = await getRenderData() as IDayNewsData
-    }
+    // }
     res.status(200).json(t);
 }

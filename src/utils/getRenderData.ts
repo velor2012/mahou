@@ -58,7 +58,7 @@ export const getRenderData = async () => {
   const day = getDayOfWeek()
   let renderData: IDayNewsData = dayNewsDataFallback
   
-  console.info(` get all remote data`)
+  console.log(` get all remote data`)
   const remoteData = await getAllData()
   renderData.timestamp = dayjs().valueOf(),
   renderData.bilibiliHotTopic = remoteData.bili,
@@ -66,7 +66,7 @@ export const getRenderData = async () => {
   renderData.techNews = remoteData.tech,
   renderData.gameNews = remoteData.game,
   renderData.hitokoto = remoteData.hitokoto,
-  console.info(` get all remote data success`)
+  console.log(` get all remote data success`)
   const imgs2base64 = getEncodeImgs()
   renderData.base64Imgs = imgs2base64
   return renderData
