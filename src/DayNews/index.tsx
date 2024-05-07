@@ -44,6 +44,14 @@ export const DayNews = () => {
     const t = (await response.json()) as IDayNewsData
     return t
   }
+  const saveImg = async ()=>{
+    const response = await fetch('/api/saveImg', {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      });
+    const t = (await response.json()) as IDayNewsData
+    return t
+  }
 
   useEffect(() => { 
     fetchData().then((res) => { 
@@ -64,11 +72,12 @@ export const DayNews = () => {
     return t
   }
 
-  useEffect(() => { 
-    setTimeout(()=>{
-        sendHtml()
-    }, 3000)
-  }, [])
+//   useEffect(() => { 
+//     setTimeout(()=>{
+//         // sendHtml()
+//         // saveImg()
+//     }, 3000)
+//   }, [])
 
   const timestamp = data.timestamp || dayNewsDataFallback.timestamp!
   const dayIns = dayjs(timestamp)
