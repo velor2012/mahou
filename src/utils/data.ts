@@ -15,9 +15,12 @@ type Item = {
 }
 const ensureCacheDir = () => {
   const cacheDir = join(__dirname, './cache')
+  console.log(cacheDir)
   if (existsSync(cacheDir)) {
+      console.log('cacheDir exist')
     return
   }
+  console.log('mkdirSync', cacheDir)
   mkdirSync(cacheDir)
 }
 ensureCacheDir()

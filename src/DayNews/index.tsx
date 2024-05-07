@@ -47,9 +47,26 @@ export const DayNews = () => {
   useEffect(() => { 
     fetchData().then((res) => { 
         setData(res)
-        debugger
     })
   }, [])
+  
+//   const sendHtml = async ()=>{
+//     const response = await fetch('/api/saveHtml', {
+//         method: 'POST',
+//         headers: { 'Content-Type': 'application/json' },
+//         body: JSON.stringify({
+//            html: document.documentElement.outerHTML
+//         })
+//       });
+//     const t = (await response.json()) as IDayNewsData
+//     return t
+//   }
+
+//   useEffect(() => { 
+//     setTimeout(()=>{
+//         sendHtml()
+//     }, 3000)
+//   }, [])
 
   const timestamp = data.timestamp || dayNewsDataFallback.timestamp!
   const dayIns = dayjs(timestamp)
@@ -324,9 +341,9 @@ function getFishCalendar(ins: Dayjs) {
     toLaborDay: getUntilNextLabor(),
     toDragonBoatDay: getUntilNextDragonBoat(),
   }
-  const getLine = (text: string, day: number) => {
+  const getLine = (text: string, day: number, idx: number) => {
     return (
-      <div className={styles.fish_line}>
+      <div className={styles.fish_line} key={idx}>
         <div className={styles.fish_line_label}>{`距离`}</div>
         <div className={styles.fish_line_highlight}>{text}</div>
         <div className={styles.fish_line_label}>{`还剩`}</div>
@@ -349,8 +366,8 @@ function getFishCalendar(ins: Dayjs) {
   sortBy(
     Object.entries(result).filter((i) => i[0] !== 'toWeekendsDay'),
     (i) => i[1]
-  ).forEach((i) => {
-    sortedLines.push(getLine(labelMap[i[0] as keyof IFishCalendar], i[1]))
+  ).forEach((i, idx) => {
+    sortedLines.push(getLine(labelMap[i[0] as keyof IFishCalendar], i[1], idx))
   })
   return (
     <div className={styles.fish}>
