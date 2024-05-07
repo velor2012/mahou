@@ -4,7 +4,7 @@
 CUSTOM_EXIT_STATUS=0
 
 # 运行命令并获取其退出状态
-timeout 10s pnpm start
+timeout --preserve-status 10s pnpm start
 exit_status=$?
 
 # 检查是否由于超时而退出
