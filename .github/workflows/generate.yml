@@ -19,12 +19,13 @@ jobs:
           sudo timedatectl set-timezone $TZ
           timedatectl
           ls -l /etc/localtime
-          
+
       - name: Install packages
         run: |
           apt install -y libnss
           apt install -y libnss3-dev libgdk-pixbuf2.0-dev libgtk-3-dev libxss-dev
-          apt install libasound2
+          apt install -y libasound2 fonts-noto-cjk
+          fc-cache -f -v
 
       - name: Checkout
         uses: actions/checkout@v3
