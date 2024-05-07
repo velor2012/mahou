@@ -5,7 +5,16 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import * as puppeteer from 'puppeteer'
 import path from 'path'
 
-const browser = await puppeteer.launch()
+const browser = await puppeteer.launch({args: ['--no-sandbox'],
+headless: true})
+
+function delay(time: number) {
+    return new Promise(function(resolve) { 
+        setTimeout(resolve, time)
+    });
+ }
+  
+
 
 export default async function handler(
   req: NextApiRequest,
@@ -19,6 +28,7 @@ export default async function handler(
         type: 'png',
         fullPage: true //边滚动边截图
     })
+    await delay(4000);
     page.close()
     res.status(200).json({
         success: true
