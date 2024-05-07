@@ -25,15 +25,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Remove not need dep
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const fs = require('fs')
-            const mahiroPkg = JSON.parse(fs.readFileSync('./mahiro/package.json', 'utf8'))
-            delete mahiroPkg.devDependencies.mahiro
-            fs.writeFileSync('./mahiro/package.json', JSON.stringify(mahiroPkg, null, 2))
-
       - uses: pnpm/action-setup@v2
         name: Install pnpm
         with:
