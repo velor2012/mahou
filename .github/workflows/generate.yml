@@ -47,31 +47,17 @@ jobs:
       - name: Install deps
         run: pnpm i --no-frozen-lockfile
 
-      - name: Prepare Bgm Data
-        run: pnpm sync:bgm
-        working-directory: ./mahiro
-
-      - name: Cache HTML
-        id: cache-html
-        uses: actions/cache@v3
-        with:
-          path: render/common/dist/index.html
-          key: ${{ runner.os }}-html-${{ hashFiles('**/pnpm-lock.yaml') }}
-
       - name: Prepare HTML
-        if: steps.cache-html.outputs.cache-hit != 'true'
         run: pnpm build
-        working-directory: ./render/common
 
       - name: Generate Image
-        run: pnpm copy && pnpm start --generate --compress
-        working-directory: ./server
+        run: pnpm start -d && sleep 5
 
       - name: Check file existence
         id: check_files
         uses: andstor/file-existence-action@v2
         with:
-          files: "server/output.png"
+          files: "output/output.png"
 
       - name: Move Image
         if: steps.check_files.outputs.files_exists == 'true'
