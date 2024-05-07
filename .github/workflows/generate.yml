@@ -43,7 +43,7 @@ jobs:
         run: pnpm build
 
       - name: Generate Image
-        run: timeout 10s pnpm start
+        run: sh run.sh
 
       - name: Check file existence
         id: check_files
