@@ -58,6 +58,11 @@ jobs:
         with:
           files: "output/output.png"
 
+      - name: Move Image
+        if: steps.check_files.outputs.files_exists == 'true'
+        run: |
+          ls 
+
       - name: Deploy
         if: steps.check_files.outputs.files_exists == 'true'
         uses: peaceiris/actions-gh-pages@v3
