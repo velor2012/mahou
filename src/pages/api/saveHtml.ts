@@ -13,7 +13,7 @@ export default async function handler(
   res: NextApiResponse<any>,
 ) {
     const { html } = req.body;
-    const cacheFile = './save.html'
+    const cacheFile = './output.html'
     writeFileSync(cacheFile, html, 'utf-8')
     res.status(200).json({html});
 }

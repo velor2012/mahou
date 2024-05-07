@@ -1,6 +1,6 @@
 "use client"; // This is a client component
 import styles from './index.module.scss'
-import mahiroLogo from './assets/1.no-bg.png'
+// import mahiroLogo from './assets/1.no-bg.png'
 import Image, { StaticImageData } from "next/image";
 import { CSSProperties, ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
 import {
@@ -9,23 +9,24 @@ import {
   IDayNewsData,
   IFishCalendar,
   dayNewsDataFallback,
+  defaultImgUrl,
 } from './interface'
 import dayjs, { type Dayjs } from 'dayjs'
 import calendar from '@/utils/js-calendar-converter'
-import fishIcon from './assets/icons/fish.png'
-import bilibiliIcon from './assets/icons/bilibili.png'
-import bgmIcon from './assets/icons/bgm.png'
-import itIcon from './assets/icons/it.png'
-import gameIcon from './assets/icons/game.png'
-import hitokotoIcon from './assets/icons/hitokoto.png'
+// import fishIcon from './assets/icons/fish.png'
+// import bilibiliIcon from './assets/icons/bilibili.png'
+// import bgmIcon from './assets/icons/bgm.png'
+// import itIcon from './assets/icons/it.png'
+// import gameIcon from './assets/icons/game.png'
+// import hitokotoIcon from './assets/icons/hitokoto.png'
 import { sortBy } from 'lodash'
 import cx from 'clsx'
 import React from 'react'
 import bgmCoverFallback from './assets/2.png'
 import { ensureFreeHdslb } from '@/utils/hdslb'
 import st from '@/utils/chinese_s2t'
-import bottomFallback from './assets/bottom.png'
-import emptyFallback from './assets/2.no-bg.png'
+// import bottomFallback from './assets/bottom.png'
+// import emptyFallback from './assets/2.no-bg.png'
 
 // mock
 // import biliData from './mock/hotTopic.json'
@@ -47,26 +48,27 @@ export const DayNews = () => {
   useEffect(() => { 
     fetchData().then((res) => { 
         setData(res)
+        
     })
   }, [])
   
-//   const sendHtml = async ()=>{
-//     const response = await fetch('/api/saveHtml', {
-//         method: 'POST',
-//         headers: { 'Content-Type': 'application/json' },
-//         body: JSON.stringify({
-//            html: document.documentElement.outerHTML
-//         })
-//       });
-//     const t = (await response.json()) as IDayNewsData
-//     return t
-//   }
+  const sendHtml = async ()=>{
+    const response = await fetch('/api/saveHtml', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+           html: document.documentElement.outerHTML
+        })
+      });
+    const t = (await response.json()) as IDayNewsData
+    return t
+  }
 
-//   useEffect(() => { 
-//     setTimeout(()=>{
-//         sendHtml()
-//     }, 3000)
-//   }, [])
+  useEffect(() => { 
+    setTimeout(()=>{
+        sendHtml()
+    }, 3000)
+  }, [])
 
   const timestamp = data.timestamp || dayNewsDataFallback.timestamp!
   const dayIns = dayjs(timestamp)
@@ -94,12 +96,12 @@ export const DayNews = () => {
   // tech
   const techData = data.techNews?.length ? data.techNews : dayNewsDataFallback.techNews
   // max 10
-  const techContent = getCommonList(techData.slice(0, 10))
+  const techContent = getCommonList(techData.slice(0, 10), data.base64Imgs.emptyFallback)
 
   // game
   const gameData = data.gameNews?.length ? data.gameNews : dayNewsDataFallback.gameNews
   // max 10
-  const gameContent = getCommonList(gameData.slice(0, 10), true)
+  const gameContent = getCommonList(gameData.slice(0, 10),  data.base64Imgs.emptyFallback, true)
 
   // hitokoto
   const hitokotoData = data.hitokoto || dayNewsDataFallback.hitokoto
@@ -114,7 +116,8 @@ export const DayNews = () => {
         <div className={styles.header}>
           <div className={styles.header_left}>
             <Image 
-            src={mahiroLogo}
+            width={1} height={1} 
+            src={data.base64Imgs.mahiroLogo}
             alt="Logo"
             priority
              />
@@ -139,7 +142,7 @@ export const DayNews = () => {
           <Block
             isCenter
             text="摸鱼日历"
-            icon={fishIcon}
+            icon={data.base64Imgs.fishIcon}
             content={fishCalendar}
           />
           <Block
@@ -150,30 +153,30 @@ export const DayNews = () => {
               width: '100%',
               minWidth: 0,
             }}
-            icon={bilibiliIcon}
+            icon={data.base64Imgs.bilibiliIcon}
             content={biliContent}
           />
         </div>
         <div className={styles.s}>
-          <Block text="今日新番" icon={bgmIcon} content={bgmContent} />
+          <Block text="今日新番" icon={data.base64Imgs.bgmIcon} content={bgmContent} />
         </div>
         <div className={styles.t}>
-          <Block text="科技资讯" icon={itIcon} content={techContent} />
+          <Block text="科技资讯" icon={data.base64Imgs.itIcon} content={techContent} />
         </div>
         <div className={styles.t}>
-          <Block text="游戏资讯" icon={gameIcon} content={gameContent} />
+          <Block text="游戏资讯" icon={data.base64Imgs.gameIcon} content={gameContent} />
         </div>
         <div className={styles.four}>
           <Block
             text="今日一言"
-            icon={hitokotoIcon}
+            icon={data.base64Imgs.hitokotoIcon}
             content={hitokotoContent}
           />
         </div>
       </div>
       {onlyOneLineBgm && (
         <div className={styles.bottom}>
-          <Image src={bottomFallback} alt='none'/>
+          <Image width={1} height={1}  src={data.base64Imgs.bottomFallback} alt='none'/>
         </div>
       )}
     </div>
@@ -188,18 +191,19 @@ function getHitokoto(data: string) {
   )
 }
 
-function Empty() {
+function Empty({data = defaultImgUrl}) {
+    
   return (
     <div className={styles.empty}>
-      <Image src={emptyFallback} alt="empty" />
+      <Image width={1} height={1}  src={data} alt="empty" />
       <div className={styles.empty_text}>EMPTY</div>
     </div>
   )
 }
 
-function getCommonList(data: string[] = [], needT2S: boolean = false) {
+function getCommonList(data: string[] = [], emptyImg: string, needT2S: boolean = false) {
   if (!data?.length) {
-    return <Empty />
+    return <Empty data={emptyImg}/>
   }
 
   return (
@@ -236,7 +240,7 @@ function getBgm(bgmData: IBangumi[] = []) {
           <div className={styles.bgm_item} key={key}>
             <div className={styles.bgm_item_cover}>
               {!i.error && <SafeImage src={i.cover!} onError={() => i.error = true} alt="bgm" />}
-              {i.error && <Image src={bgmCoverFallback} alt="bgm" />}
+              {i.error && <Image width={1} height={1}  src={bgmCoverFallback} alt="bgm" />}
             </div>
             <div className={styles.bgm_item_title}>{i.title}</div>
           </div>
@@ -341,7 +345,7 @@ function getFishCalendar(ins: Dayjs) {
     toLaborDay: getUntilNextLabor(),
     toDragonBoatDay: getUntilNextDragonBoat(),
   }
-  const getLine = (text: string, day: number, idx: number) => {
+  const getLine = (text: string, day: number, idx: number=-1) => {
     return (
       <div className={styles.fish_line} key={idx}>
         <div className={styles.fish_line_label}>{`距离`}</div>
@@ -399,7 +403,7 @@ function Block({
         )}
       >
         <div className={styles.block_title_icon}>
-          <Image src={icon} alt="icon"/>
+          <Image width={1} height={1}  src={icon} alt="icon"/>
         </div>
         <div className={styles.block_title_text}>{text}</div>
       </div>
